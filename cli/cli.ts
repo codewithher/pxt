@@ -1930,7 +1930,8 @@ function saveThemeJson(cfg: pxt.TargetBundle, localDir?: boolean, packaged?: boo
             const docsRoot = nodeutil.targetDir;
             let gcards: pxt.CodeCard[] = [];
             let tocmd: string =
-                `# Projects
+    `<!-- This file is generated from targetconfig.json. Do not edit. -->
+# Projects
 
 `;
             Object.keys(targetConfig.galleries).forEach(k => {
@@ -1965,7 +1966,8 @@ function saveThemeJson(cfg: pxt.TargetBundle, localDir?: boolean, packaged?: boo
 
             nodeutil.writeFileSync(path.join(docsRoot, "docs/projects/SUMMARY.md"), tocmd, { encoding: "utf8" });
             nodeutil.writeFileSync(path.join(docsRoot, "docs/projects.md"),
-                `# Projects
+                `<!-- This file is generated from targetconfig.json. Do not edit. -->
+# Projects
 
 \`\`\`codecard
 ${JSON.stringify(gcards, null, 4)}
