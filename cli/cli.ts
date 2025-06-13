@@ -1841,7 +1841,7 @@ function replaceStaticImagesInJsonBlob(cfg: any, staticAssetHandler: (fileLocati
     return pxt.replaceStringsInJsonBlob(cfg, /^\.?\/static\/.+\.(png|gif|jpeg|jpg|svg|mp4|ico)$/i, staticAssetHandler);
 }
 
-const GENERATED_FILE_DECLARATION = `<!-- This file is generated from targetconfig.json. Do not edit. -->\n\n`;
+const GENERATED_FILE_DECLARATION = `<!-- This file is generated from pxtarget.json during "pxt serve". Do not edit. -->\n\n`;
 
 function saveThemeJson(cfg: pxt.TargetBundle, localDir?: boolean, packaged?: boolean) {
     cfg.appTheme.id = cfg.id
