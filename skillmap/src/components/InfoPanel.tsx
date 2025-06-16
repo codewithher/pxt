@@ -87,7 +87,6 @@ export class InfoPanelImpl extends React.Component<InfoPanelProps> {
 
         const hasCloudSync = pxt.auth.hasIdentity();
         return <div className="info-panel" ref={this.handleRef}>
-            <p>Rebuilt</p>
             <div className="info-panel-image">
                 {imageUrl
                 ? <img src={imageUrl} alt={thumbnailAltText} />

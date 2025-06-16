@@ -105,32 +105,7 @@ export class ActivityActionsImpl extends React.Component<ActivityActionsProps> {
 
         // Apply "grid" class when there are four actions (for a completed activity)
         return <div className={`actions ${completedHeaderId ? "grid" : ""}`}>
-            {signedIn ? (
-                <Button
-                    className="tertiary"
-                    tabIndex={-1}
-                    ariaPosInSet={1}
-                    ariaSetSize={numberOfActions}
-                    title={this.getActivityActionText()}
-                    label={this.getActivityActionText()}
-                    onClick={this.handleActionButtonClick}
-                />
-                ) : (
-                    <div>
-                        <p>Rebuilt</p>
-                        <Button
-                            className="tertiary locked"
-                            tabIndex={-1}
-                            ariaPosInSet={1}
-                            ariaSetSize={numberOfActions}
-                            title={lf("Locked")}
-                            label={lf("Locked")}
-                            onClick={dispatchShowLoginModal}
-                            />
-                    </div>
-                )}
-            
-            {/* <Button
+            <Button
                 className="tertiary"
                 tabIndex={-1}
                 ariaPosInSet={1}
@@ -138,7 +113,7 @@ export class ActivityActionsImpl extends React.Component<ActivityActionsProps> {
                 title={this.getActivityActionText()}
                 label={this.getActivityActionText()}
                 onClick={this.handleActionButtonClick}
-            /> */}
+            />
             {activityStarted && <>
                 <Button
                     className="primary inverted"
