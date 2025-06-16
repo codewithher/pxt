@@ -47,9 +47,9 @@ export class GalleryViewerDialog extends data.Component<GalleryViewerDialogProps
     }
 
     show(galleryPath: string, galleryName: string) {
-        this.setState({ 
-            visible: true, 
-            galleryPath: galleryPath, 
+        this.setState({
+            visible: true,
+            galleryPath: galleryPath,
             galleryName: galleryName,
             galleryCards: []  // Clear previous gallery cards
         }, () => {
@@ -77,10 +77,10 @@ export class GalleryViewerDialog extends data.Component<GalleryViewerDialogProps
 
     handleCardClick(e: any, scr: pxt.CodeCard) {
         pxt.tickEvent("galleryviewer.card", { name: scr.name, cardType: scr.cardType });
-        
+
         // Use the same application method as the regular gallery
         applyCodeCardAction(this.props.parent, "projects", scr);
-        
+
         // Close the dialog after selection
         this.close();
     }
@@ -95,11 +95,11 @@ export class GalleryViewerDialog extends data.Component<GalleryViewerDialogProps
         if (!visible) return <div />;
 
         // Filter gallery cards based on search term if provided
-        const filteredCards = searchFor && galleryCards ? 
-            galleryCards.filter(card => 
+        const filteredCards = searchFor && galleryCards ?
+            galleryCards.filter(card =>
                 (card.name || "").toLowerCase().indexOf(searchFor) !== -1 ||
                 (card.description || "").toLowerCase().indexOf(searchFor) !== -1
-            ) : 
+            ) :
             galleryCards || [];
 
         return (
@@ -116,7 +116,7 @@ export class GalleryViewerDialog extends data.Component<GalleryViewerDialogProps
                             {searchFor ? lf("No matching tutorials found.") : lf("No tutorials found.")}
                         </div> :
                         <div className="ui cards centered gallery-cards">
-                            {filteredCards.map((card, index) => 
+                            {filteredCards.map((card, index) =>
                                 <codecard.CodeCardView
                                     key={card.name || card.url || index}
                                     name={card.name}
