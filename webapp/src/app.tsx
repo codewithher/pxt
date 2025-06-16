@@ -32,6 +32,7 @@ import * as scriptsearch from "./scriptsearch";
 import * as extensionsBrowser from "./extensionsBrowser";
 import * as projects from "./projects";
 import * as scriptmanager from "./scriptmanager";
+import * as galleryviewer from "./galleryviewer";
 import * as extensions from "./extensions";
 import * as sounds from "./sounds";
 import * as make from "./make";
@@ -144,6 +145,7 @@ export class ProjectView
     shareEditor: share.ShareEditor;
     languagePicker: lang.LanguagePicker;
     scriptManagerDialog: scriptmanager.ScriptManagerDialog;
+    galleryViewerDialog: galleryviewer.GalleryViewerDialog;
     importDialog: projects.ImportDialog;
     loginDialog: identity.LoginDialog;
     profileDialog: user.ProfileDialog;
@@ -4126,6 +4128,10 @@ export class ProjectView
         this.scriptManagerDialog.show();
     }
 
+    showGalleryViewer(galleryPath: string, galleryName: string) {
+        this.galleryViewerDialog.show(galleryPath, galleryName);
+    }
+
     importProjectDialog() {
         this.importDialog.show();
     }
@@ -5297,6 +5303,10 @@ export class ProjectView
         this.scriptManagerDialog = c;
     }
 
+    private handleGalleryViewerDialogRef = (c: galleryviewer.GalleryViewerDialog) => {
+        this.galleryViewerDialog = c;
+    }
+
     private handleImportDialogRef = (c: projects.ImportDialog) => {
         this.importDialog = c;
     }
@@ -5499,6 +5509,7 @@ export class ProjectView
                 {hasIdentity ? <identity.LoginDialog parent={this} ref={this.handleLoginDialogRef} /> : undefined}
                 {hasIdentity ? <user.ProfileDialog parent={this} ref={this.handleProfileDialogRef} /> : undefined}
                 {inHome && targetTheme.scriptManager ? <scriptmanager.ScriptManagerDialog parent={this} ref={this.handleScriptManagerDialogRef} onClose={this.handleScriptManagerDialogClose} /> : undefined}
+                <galleryviewer.GalleryViewerDialog parent={this} ref={this.handleGalleryViewerDialogRef} />
                 {sandbox ? undefined : <projects.ExitAndSaveDialog parent={this} ref={this.handleExitAndSaveDialogRef} />}
                 {sandbox ? undefined : <projects.NewProjectDialog parent={this} ref={this.handleNewProjectDialogRef} />}
                 {hwDialog ? <projects.ChooseHwDialog parent={this} ref={this.handleChooseHwDialogRef} /> : undefined}

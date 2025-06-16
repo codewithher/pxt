@@ -197,7 +197,24 @@ export class Projects extends auth.Component<ISettingsProps, ProjectsState> {
                     const url = typeof galProps === "string" ? galProps : galProps.url
                     const shuffle: pxt.GalleryShuffle = typeof galProps === "string" ? undefined : galProps.shuffle;
                     return <div key={`${galleryName}_gallerysegment`} className="ui segment gallerysegment" role="region" aria-label={pxt.Util.rlf(galleryName)}>
-                        <h2 className="ui header heading">{pxt.Util.rlf(galleryName)} </h2>
+                        <div className="ui heading">
+                            <div className="column" style={{ zIndex: 1 }}
+                                 onClick={() => url && this.props.parent.showGalleryViewer(url, galleryName)} 
+                                 onKeyDown={fireClickOnEnter}
+                            >
+                                <h2 className="ui header myproject-header">
+                                    {pxt.Util.rlf(galleryName)}
+                                    <span 
+                                        className="view-all-button" 
+                                        tabIndex={0} 
+                                        title={lf("View all {0}", galleryName)} 
+                                        role="button"
+                                    >
+                                        {lf("View All")}
+                                    </span>
+                                </h2>
+                            </div>
+                        </div>
                         <div className="content">
                             <ProjectsCarousel ref={`${selectedCategory == galleryName ? 'activeCarousel' : ''}`}
                                 key={`${galleryName}_carousel`} parent={this.props.parent}
@@ -205,6 +222,7 @@ export class Projects extends auth.Component<ISettingsProps, ProjectsState> {
                                 path={url}
                                 onClick={this.chgGallery} setSelected={this.setSelected}
                                 shuffle={shuffle}
+                                showViewAll={false}
                                 selectedIndex={selectedCategory == galleryName ? selectedIndex : undefined} />
                         </div>
                     </div>
@@ -570,6 +588,7 @@ interface ProjectsCarouselProps extends ISettingsProps {
     selectedIndex?: number;
     setSelected?: (name: string, index: number) => void;
     shuffle?: pxt.GalleryShuffle;
+    showViewAll?: boolean;
 }
 
 interface ProjectsCarouselState {
@@ -591,6 +610,7 @@ export class ProjectsCarousel extends data.Component<ProjectsCarouselProps, Proj
         this.closeDetailOnEscape = this.closeDetailOnEscape.bind(this);
         this.reload = this.reload.bind(this);
         this.showScriptManager = this.showScriptManager.bind(this);
+        this.handleViewAllClick = this.handleViewAllClick.bind(this);
         this.handleCardClick = this.handleCardClick.bind(this);
     }
 
@@ -637,6 +657,17 @@ export class ProjectsCarousel extends data.Component<ProjectsCarouselProps, Proj
     showScriptManager() {
         pxt.tickEvent("projects.showscriptmanager", undefined, { interactiveConsent: true });
         this.props.parent.showScriptManager();
+    }
+
+    handleViewAllClick(e: React.MouseEvent<HTMLSpanElement>) {
+        e.stopPropagation();
+        e.preventDefault();
+        
+        const { name, path } = this.props;
+        if (path) {
+            pxt.tickEvent("gallery.viewall", { gallery: name });
+            this.props.parent.showGalleryViewer(path, name);
+        }
     }
 
     closeDetail() {
@@ -705,7 +736,28 @@ export class ProjectsCarousel extends data.Component<ProjectsCarouselProps, Proj
             } else {
                 const selectedElement = cards[selectedIndex];
                 const hasTags = cards.some(c => c.tags && c.tags.length != 0)
-                return <div>
+                return <div className="ui segment gallery-segment">
+                    {this.props.showViewAll && (
+                        <div className="ui grid gallery-grid">
+                            <div className="ui row gallery-header">
+                                <div className="column">
+                                    <h2 className="ui header gallery-title">
+                                        {lf(name)}
+                                        <span 
+                                            className="view-all-button" 
+                                            tabIndex={0} 
+                                            title={lf("View all {0}", name)} 
+                                            role="button"
+                                            onClick={this.handleViewAllClick}
+                                            onKeyDown={fireClickOnEnter}
+                                        >
+                                            {lf("View All")}
+                                        </span>
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                     <carousel.Carousel ref="carousel" tickId={path} bleedPercent={20} selectedIndex={selectedIndex}>
                         {cards.map((scr, index) =>
                             <ProjectsCodeCard
@@ -1195,7 +1247,7 @@ function cardActionButton(props: Partial<ProjectsDetailProps>, className: string
         />
 }
 
-function applyCodeCardAction(projectView: IProjectView, ticSrc: "projects" | "herobanner", scr: pxt.CodeCard, action?: pxt.CodeCardAction) {
+export function applyCodeCardAction(projectView: IProjectView, ticSrc: "projects" | "herobanner", scr: pxt.CodeCard, action?: pxt.CodeCardAction) {
     let editor: string = (action && action.editor) || "blocks";
     if (editor == "js") editor = "ts";
     const url = action ? action.url : scr.url;
