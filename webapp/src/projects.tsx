@@ -199,15 +199,15 @@ export class Projects extends auth.Component<ISettingsProps, ProjectsState> {
                     return <div key={`${galleryName}_gallerysegment`} className="ui segment gallerysegment" role="region" aria-label={pxt.Util.rlf(galleryName)}>
                         <div className="ui heading">
                             <div className="column" style={{ zIndex: 1 }}
-                                 onClick={() => url && this.props.parent.showGalleryViewer(url, galleryName)} 
+                                 onClick={() => url && this.props.parent.showGalleryViewer(url, galleryName)}
                                  onKeyDown={fireClickOnEnter}
                             >
                                 <h2 className="ui header myproject-header">
                                     {pxt.Util.rlf(galleryName)}
-                                    <span 
-                                        className="view-all-button" 
-                                        tabIndex={0} 
-                                        title={lf("View all {0}", galleryName)} 
+                                    <span
+                                        className="view-all-button"
+                                        tabIndex={0}
+                                        title={lf("View all {0}", galleryName)}
                                         role="button"
                                     >
                                         {lf("View All")}
@@ -662,7 +662,7 @@ export class ProjectsCarousel extends data.Component<ProjectsCarouselProps, Proj
     handleViewAllClick(e: React.MouseEvent<HTMLSpanElement>) {
         e.stopPropagation();
         e.preventDefault();
-        
+
         const { name, path } = this.props;
         if (path) {
             pxt.tickEvent("gallery.viewall", { gallery: name });
@@ -743,10 +743,10 @@ export class ProjectsCarousel extends data.Component<ProjectsCarouselProps, Proj
                                 <div className="column">
                                     <h2 className="ui header gallery-title">
                                         {lf(name)}
-                                        <span 
-                                            className="view-all-button" 
-                                            tabIndex={0} 
-                                            title={lf("View all {0}", name)} 
+                                        <span
+                                            className="view-all-button"
+                                            tabIndex={0}
+                                            title={lf("View all {0}", name)}
                                             role="button"
                                             onClick={this.handleViewAllClick}
                                             onKeyDown={fireClickOnEnter}
