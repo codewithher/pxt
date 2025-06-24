@@ -23,8 +23,9 @@ on:
     - cron: '34 6 * * 0'
 
 permissions:
+  contents: read
+  actions: read
   security-events: write
-  contents: read  # Required for GH_TOKEN to access repository contents
 
 jobs:
   analyze:
