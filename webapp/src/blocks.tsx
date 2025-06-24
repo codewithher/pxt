@@ -619,6 +619,15 @@ export class Editor extends toolboxeditor.ToolboxEditor {
         Blockly.config.connectingSnapRadius = 96;
 
         this.editor = Blockly.inject(blocklyDiv, this.getBlocklyOptions(forceHasCategories)) as Blockly.WorkspaceSvg;
+        
+        // Add block change listener to log block changes
+        this.editor.addChangeListener((ev: any) => {
+            if (ev.type === Blockly.Events.CREATE || 
+                ev.type === Blockly.Events.DELETE || 
+                ev.type === Blockly.Events.CHANGE) {
+                this.logCurrentBlocks();
+            }
+        });
         pxtblockly.contextMenu.setupWorkspaceContextMenu(this.editor);
 
         // set Blockly Colors
@@ -1019,6 +1028,40 @@ export class Editor extends toolboxeditor.ToolboxEditor {
     }
 
     private _loadBlocklyPromise: Promise<void>;
+
+    private logCurrentBlocks() {
+        if (!this.editor) return;
+        
+        const blocks = this.editor.getAllBlocks(false); // Don't include child blocks
+        const blockTypes = blocks.map(block => block.type);
+        console.log('Current blocks in workspace:', blockTypes);
+        
+        // Group and count block types
+        const blockCounts: pxt.Map<number> = {};
+        blocks.forEach(block => {
+            blockCounts[block.type] = (blockCounts[block.type] || 0) + 1;
+        });
+        console.log('Block counts:', blockCounts);
+    }
+
+    public getCurrentBlockTypes(): string[] {
+        if (!this.editor) return [];
+        return this.editor.getAllBlocks(false).map(block => block.type);
+    }
+
+    public getBlockTypeCounts(): pxt.Map<number> {
+        if (!this.editor) return {};
+        
+        const blocks = this.editor.getAllBlocks(false);
+        const counts: pxt.Map<number> = {};
+        
+        blocks.forEach(block => {
+            counts[block.type] = (counts[block.type] || 0) + 1;
+        });
+        
+        return counts;
+    }
+
     loadBlocklyAsync() {
         if (!this._loadBlocklyPromise) {
             pxt.perf.measureStart(Measurements.LoadBlockly)
@@ -2333,3 +2376,4 @@ function getCopyData(): CopyDataEntry | undefined {
 function copyDataKey() {
     return "copyData";
 }
+
