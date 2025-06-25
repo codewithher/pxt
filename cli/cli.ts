@@ -1841,6 +1841,8 @@ function replaceStaticImagesInJsonBlob(cfg: any, staticAssetHandler: (fileLocati
     return pxt.replaceStringsInJsonBlob(cfg, /^\.?\/static\/.+\.(png|gif|jpeg|jpg|svg|mp4|ico)$/i, staticAssetHandler);
 }
 
+const GENERATED_FILE_DECLARATION = `<!-- This file is generated from targetconfig.json. Do not edit. -->\n\n`;
+
 function saveThemeJson(cfg: pxt.TargetBundle, localDir?: boolean, packaged?: boolean) {
     cfg.appTheme.id = cfg.id
     cfg.appTheme.title = cfg.title
@@ -1929,10 +1931,7 @@ function saveThemeJson(cfg: pxt.TargetBundle, localDir?: boolean, packaged?: boo
         if (targetConfig?.galleries) {
             const docsRoot = nodeutil.targetDir;
             let gcards: pxt.CodeCard[] = [];
-            let tocmd: string =
-                `# Projects
-
-`;
+            let tocmd: string = GENERATED_FILE_DECLARATION + `# Projects\n`;
             Object.keys(targetConfig.galleries).forEach(k => {
                 targetStrings[k] = k;
                 const galleryUrl = getGalleryUrl(targetConfig.galleries[k])
@@ -1940,8 +1939,7 @@ function saveThemeJson(cfg: pxt.TargetBundle, localDir?: boolean, packaged?: boo
                 const gallery = pxt.gallery.parseGalleryMardown(gallerymd);
                 const gurl = `/${galleryUrl.replace(/^\//, '')}`;
                 tocmd +=
-                    `* [${k}](${gurl})
-`;
+                    `* [${k}](${gurl})\n`;
                 const gcard: pxt.CodeCard = {
                     name: k,
                     url: gurl
@@ -1964,18 +1962,21 @@ function saveThemeJson(cfg: pxt.TargetBundle, localDir?: boolean, packaged?: boo
             });
 
             nodeutil.writeFileSync(path.join(docsRoot, "docs/projects/SUMMARY.md"), tocmd, { encoding: "utf8" });
-            nodeutil.writeFileSync(path.join(docsRoot, "docs/projects.md"),
-                `# Projects
+            const PROJECTS_MD_CONTENT = [
+                GENERATED_FILE_DECLARATION,
+                '',
+                '# Projects',
+                '',
+                '```codecard',
+                JSON.stringify(gcards, null, 4),
+                '```',
+                '',
+                '## See Also',
+                '',
+                gcards.map(gcard => `[${gcard.name}](${gcard.url})`).join(',\n')
+            ].join('\n');
 
-\`\`\`codecard
-${JSON.stringify(gcards, null, 4)}
-\`\`\`
-
-## See Also
-
-${gcards.map(gcard => `[${gcard.name}](${gcard.url})`).join(',\n')}
-
-`, { encoding: "utf8" });
+            nodeutil.writeFileSync(path.join(docsRoot, "docs/projects.md"), PROJECTS_MD_CONTENT, { encoding: "utf8" });
         }
         const multiplayerGames = targetConfig?.multiplayer?.games;
         for (const game of (multiplayerGames ?? [])) {
