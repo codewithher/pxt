@@ -53,11 +53,9 @@ export class GithubButton extends sui.UIElement<GithubButtonProps, GithubButtonS
         const { githubId } = header;
         const ghid = pxt.github.parseRepoId(githubId);
         const defaultCls = "ui icon button editortools-btn editortools-github-btn"
-        // new github repo
+        // new github repo - disabled
         if (!ghid)
-            return <sui.Button key="githubcreatebtn" className={`${defaultCls} ${this.props.className || ""}`}
-                icon="github" title={lf("create GitHub repository")} ariaLabel={lf("create GitHub repository")}
-                onClick={this.createRepository} />
+            return <div /> //returns empty div instead of the github button
 
         // existing repo
         const meta: pkg.PackageGitStatus = this.getData("pkg-git-status:" + header.id);
