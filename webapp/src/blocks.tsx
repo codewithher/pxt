@@ -619,11 +619,11 @@ export class Editor extends toolboxeditor.ToolboxEditor {
         Blockly.config.connectingSnapRadius = 96;
 
         this.editor = Blockly.inject(blocklyDiv, this.getBlocklyOptions(forceHasCategories)) as Blockly.WorkspaceSvg;
-        
+
         // Add block change listener to log block changes
         this.editor.addChangeListener((ev: any) => {
-            if (ev.type === Blockly.Events.CREATE || 
-                ev.type === Blockly.Events.DELETE || 
+            if (ev.type === Blockly.Events.CREATE ||
+                ev.type === Blockly.Events.DELETE ||
                 ev.type === Blockly.Events.CHANGE) {
                 this.logCurrentBlocks();
             }
@@ -1031,11 +1031,11 @@ export class Editor extends toolboxeditor.ToolboxEditor {
 
     private logCurrentBlocks() {
         if (!this.editor) return;
-        
+
         const blocks = this.editor.getAllBlocks(false); // Don't include child blocks
         const blockTypes = blocks.map(block => block.type);
         console.log('Current blocks in workspace:', blockTypes);
-        
+
         // Group and count block types
         const blockCounts: pxt.Map<number> = {};
         blocks.forEach(block => {
@@ -1051,10 +1051,10 @@ export class Editor extends toolboxeditor.ToolboxEditor {
 
     public getBlockTypeCounts(): pxt.Map<number> {
         if (!this.editor) return {};
-        
+
         const blocks = this.editor.getAllBlocks(false);
         const counts: pxt.Map<number> = {};
-        
+
         blocks.forEach(block => {
             counts[block.type] = (counts[block.type] || 0) + 1;
         });
