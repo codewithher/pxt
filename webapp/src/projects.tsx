@@ -334,7 +334,7 @@ interface HeroBannerState {
     paused?: boolean;
 }
 
-const HERO_BANNER_DELAY = 9000; // 9 seconds per card
+const HERO_BANNER_DELAY = 5000; // 5 seconds per card
 class HeroBanner extends data.Component<ISettingsProps, HeroBannerState> {
     protected prevGalleries: pxt.CodeCard[];
     protected static fetchedImages: pxt.Map<HTMLImageElement> = {};
@@ -1130,20 +1130,20 @@ export class ProjectsDetail extends data.Component<ProjectsDetailProps, Projects
 
 function codeCardButtonLabel(cardType: string, youTubeId?: string, youTubePlaylistId?: string) {
     if (cardType == "tutorial")
-        return lf("Start Tutorial");
+        return lf("Start Tutorial!");
     else if (cardType == "codeExample" || cardType == "example")
-        return lf("Open Example");
+        return lf("Open Example!");
     else if (cardType == "forumUrl")
-        return lf("Open in Forum");
+        return lf("Open in Forum!");
     else if (cardType == "sharedExample")
-        return lf("Open in Editor");
+        return lf("Open in Editor!");
     else if (cardType == "template")
-        return lf("New Project");
+        return lf("New Project!");
     else if (youTubeId)
-        return lf("Watch Video");
+        return lf("Watch Video!");
     else if (youTubePlaylistId)
-        return lf("Watch Playlist");
-    return lf("Show Instructions");
+        return lf("Watch Playlist!");
+    return lf("Show Instructions!");
 }
 
 function cardIsLink(props: Partial<ProjectsDetailProps>, actionType?: pxt.CodeCardType) {
