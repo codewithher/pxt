@@ -1058,7 +1058,7 @@ export class Editor extends toolboxeditor.ToolboxEditor {
         blocks.forEach(block => {
             counts[block.type] = (counts[block.type] || 0) + 1;
         });
-        
+
         return counts;
     }
 
