@@ -939,6 +939,7 @@ declare namespace pxt.editor {
         createProjectAsync(options: pxt.editor.ProjectCreationOptions): Promise<void>;
         importExampleAsync(options: ExampleImportOptions): Promise<void>;
         showScriptManager(): void;
+        showGalleryViewer(galleryPath: string, galleryName: string): void;
         importProjectDialog(): void;
         removeProject(): void;
         editText(): void;
