@@ -1,18 +1,47 @@
 import * as React from "react";
 
+// declares LLMChat react component
 export const LLMChat: React.FC = () => {
-    const [isOpen, setIsOpen] = React.useState(false);
-    const [input, setInput] = React.useState("");
-    const [messages, setMessages] = React.useState<string[]>([]);
+    const [isOpen, setIsOpen] = React.useState(false); // controls whether the chat popup is open or closed
+    const [input, setInput] = React.useState(""); // stores the user's input in text box
+    const [messages, setMessages] = React.useState<string[]>([]); // stores the chat history
 
-    const handleToggle = () => setIsOpen(!isOpen);
+    const handleToggle = () => setIsOpen(!isOpen); 
 
-    const handleSend = () => {
-        if (!input.trim()) return;
-        const newMessages = [...messages, `You: ${input}`, `LLM: ${input}`];
-        setMessages(newMessages);
+    // handles sending the user's message to the backend
+    const handleSend = async () => {
+        if (!input.trim()) return; // if the input is empty, do nothing
+    
+        // add the user's message to chat and clears input field
+        const userMessage = input;
+        setMessages((prev) => [...prev, `You: ${userMessage}`]);
         setInput("");
+    
+        // sends the user's message to the backend and waits for the response
+        try {
+            const response = await fetch("http://localhost:3001/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: userMessage })
+            });
+    
+            const data = await response.json(); // parses the JSON response from the backend
+    
+            // if there's a reply, show it, otherwise, show an error message
+            if (data.reply) {
+                setMessages((prev) => [...prev, `LLM: ${data.reply}`]);
+            } else {
+                setMessages((prev) => [...prev, "LLM: [Error getting reply]"]);
+            }
+        } 
+        
+        // error handling
+        catch (err) {
+            console.error("Error:", err);
+            setMessages((prev) => [...prev, "LLM: [Network error]"]);
+        }
     };
+    
 
     return (
         <>
