@@ -9,6 +9,7 @@ import * as identity from "./identity";
 import { ProjectView } from "./app";
 import { userPrefersDownloadFlagSet } from "./webusb";
 import { dialogAsync, hideDialog } from "./core";
+import { LLMChat } from "./llmbutton";
 
 import ISettingsProps = pxt.editor.ISettingsProps;
 import SimState = pxt.editor.SimState;
@@ -462,6 +463,7 @@ export class EditorToolbar extends data.Component<ISettingsProps, EditorToolbarS
                         />
                     </div>}
             </div>
+            <LLMChat />
         </div>;
     }
 }
